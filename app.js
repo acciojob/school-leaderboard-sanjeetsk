@@ -29,7 +29,19 @@ app.get("/", (req, res) => {
 });
 
 // your code here!
+app.get("/topRankings", async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || onePageArticleCount;
+    const offset = parseInt(req.query.offset) || 0;
 
+    // Fetch paginated leaderboard data
+    const rankings = await Leaderboard.find().skip(offset).limit(limit);
+
+    res.json(rankings);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+});
 // ==end==
 
 module.exports = { app, db };
